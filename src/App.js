@@ -1,25 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+
 import './App.css';
+import Header from './Components/Header/Header';
+import Persons from './Components/Persons/Persons';
+import Infocart from './Components/Infocart/Infocart';
 
 function App() {
+  const [personNames, setPersonNames] = useState([])
+
+  useEffect(()=>{
+    fetch ('https://randomuser.me/api/?results=15')
+    .then (res=> res.json())
+    .then (data=>{
+      setPersonNames(data['results'] );
+      console.log(data);
+      // const names = data.map(results => results.name)
+      // console.log(names);
+    })
+    .catch(error=>console.log(error))
+  },[])
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      
+      <Header ></Header>
+
+      
+      {
+        personNames.map(personNames=><Persons email={personNames.email} phone={personNames.cell} name={personNames.name.first} gender={personNames.gender} picture={personNames.picture.large}></Persons>)
+      }
+      
+      
+      
+
+
+      
     </div>
+    
   );
 }
 
